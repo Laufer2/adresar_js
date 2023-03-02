@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
@@ -21,7 +21,7 @@ export default function Table(props) {
 
   useEffect(() => {
     if (isSelected) {
-      navigate(':id');
+      navigate('/contacts/' + isSelected);
     }
   }, [isSelected]);
 
@@ -33,10 +33,7 @@ export default function Table(props) {
     const { id } = params.row;
     const newContacts = _.cloneDeep(props.rows);
     const index = newContacts.findIndex((contact) => contact.id === id);
-    console.log(newContacts)
-    console.log(index)
     newContacts[index].isFavorite = !isFav;
-
 
     const contactData = {
       isFavorite: !isFav,
@@ -54,9 +51,8 @@ export default function Table(props) {
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
     { field: "userId", headerName: "ID User" },
-    { field: "contactType", headerName: "Contact Type" },
-    { field: "firstname", headerName: "First name", width: 130 },
-    { field: "lastname", headerName: "Last name", width: 130 },
+    { field: "firstname", headerName: "First name", width: 100 },
+    { field: "lastname", headerName: "Last name", width: 100 },
     {
       field: "bday",
       headerName: "Birthday",
@@ -64,9 +60,14 @@ export default function Table(props) {
       width: 100,
     },
     {
+      field: "contactType",
+      headerName: "Contact type",
+      width: 110,
+    },
+    {
       field: "contact",
       headerName: "Contact",
-      width: 150,
+      width: 120,
     },
     {
       field: "isFavorite",
@@ -97,8 +98,7 @@ export default function Table(props) {
   // };
 
   function selectionChangeHandler(selectionModel) {
-    console.log(`Selected Rows: ${selectionModel}`);
-    setIsSelected(!isSelected);
+    setIsSelected(selectionModel);
   }
 
   return (<>
@@ -110,8 +110,8 @@ export default function Table(props) {
           pageSize={5}
           rowsPerPageOptions={[5]}
           columnVisibilityModel={{
+            id: false,
             userId: false,
-            contactType: false,
           }}
           components={{
             Toolbar: GridToolbar,
