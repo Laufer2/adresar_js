@@ -21,7 +21,6 @@ export const getContacts = createAsyncThunk(
          }
       })
          .then((response) => {
-            console.log(response.data);
             let contactsArray = [];
 
             for (let key in response.data) {
@@ -80,16 +79,18 @@ export const patchContact = createAsyncThunk(
    async (requestParams, { dispatch }) => {
 
       dispatch(crudStart());
-
-      let queryParams = '?auth=' + requestParams[0].token + "/" + requestParams[0].id + "/.json";
-      console.log("query-params-patch ", queryParams)
+      let queryParams = '?auth=' + requestParams.token + "/" + requestParams.id + "/.json";
       const url =
-         "https://adresar-dfb64-default-rtdb.europe-west1.firebasedatabase.app/adresar.json" + queryParams;
-      console.log(url)
+         "https://adresar-dfb64-default-rtdb.europe-west1.firebasedatabase.app/adresar" + queryParams;
+
       axios(url, {
-         method: requestParams.method,
+         method: "PATCH",
          headers: {
+            "Authorization": "Bearer " + requestParams.token,
             "Content-Type": "application/json",
+            'Access-Control-Allow-Origin': 'http://localhost:3000',
+            "Access-Control-Allow-Methods": "DELETE, PATCH, PUT, POST, GET, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"
          },
          data: { isFavorite: requestParams.isFavorite },
       })
@@ -98,7 +99,8 @@ export const patchContact = createAsyncThunk(
             );
          })
          .catch((err) => {
-            dispatch(crudFail(err.response.data.error));
+            console.log(err)
+            dispatch(crudFail(err.message));
          });
    }
 );
@@ -109,9 +111,9 @@ export const deleteContact = createAsyncThunk(
       dispatch(crudStart());
       let queryParams = '?auth=' + requestParams[0].token + "/" + requestParams[0].id + ".json";
       const url =
-         "https://adresar-dfb64-default-rtdb.europe-west1.firebasedatabase.app/adresar.json" + queryParams;
+         "https://adresar-dfb64-default-rtdb.europe-west1.firebasedatabase.app/adresar" + queryParams;
       axios(url, {
-         method: "delete",
+         method: "DELETE",
          headers: {
             "Content-Type": "application/json",
          },
@@ -143,6 +145,9 @@ const crudSlice = createSlice({
          state.responseError = action.payload.message;
          state.isLoadin = false;
       },
+      updateContacts: (state, action) => {
+         state.contacts = action.payload.contacts;
+      }
    }
 })
 
@@ -150,6 +155,7 @@ export const {
    crudStart,
    crudSuccess,
    crudFail,
+   updateContacts,
 } = crudSlice.actions;
 
 export default crudSlice.reducer;

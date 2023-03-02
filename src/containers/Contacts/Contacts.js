@@ -35,8 +35,6 @@ const Contacts = () => {
         setIsFetched(!isFetched)
     }, [])
 
-
-
     const addNewHandler = () => {
         setAddNew(true);
     }

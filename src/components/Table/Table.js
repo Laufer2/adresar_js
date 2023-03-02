@@ -4,8 +4,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import { ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { Favorite, FavoriteBorder } from "@mui/icons-material";
+import _ from 'lodash';
 
-import { patchContact } from "../../store/reducers/crudRdc";
+import { patchContact, updateContacts } from "../../store/reducers/crudRdc";
 import classes from "./Table.module.css";
 
 
@@ -29,20 +30,26 @@ export default function Table(props) {
   }
 
   const favoriteButtonClickHandler = (params) => {
-    console.log("klik: ", token);
     const { id } = params.row;
-    const index = props.rows.findIndex((contact) => contact.id === id);
+    const newContacts = _.cloneDeep(props.rows);
+    const index = newContacts.findIndex((contact) => contact.id === id);
+    console.log(newContacts)
+    console.log(index)
+    newContacts[index].isFavorite = !isFav;
 
-    const contactData = [{
+
+    const contactData = {
       isFavorite: !isFav,
       id: id,
+      index: index,
       token: token,
       method: "patch"
-    }]
-    console.log("kuuu", contactData)
-    dispatch(patchContact(contactData))
+    }
+    dispatch(updateContacts({ contacts: newContacts }))
+    //dispatch(patchContact(contactData))
     setIsFav(!isFav);
   };
+  ;
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
