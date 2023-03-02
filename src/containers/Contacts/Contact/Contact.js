@@ -40,7 +40,6 @@ const Contact = (props) => {
         name: "update",
         label: "Update",
         onClick: updateContinueHandler
-
     }]
 
     return (

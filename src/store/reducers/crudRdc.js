@@ -10,7 +10,6 @@ const initialState = {
 export const getContacts = createAsyncThunk(
    "crudRdc",
    async (requestParams, { dispatch }) => {
-      console.log("getcontact: ", requestParams)
       const queryParams = '?auth=' + requestParams.token + '&orderBy="userId"&equalTo="' + requestParams.userId + '"';
       let url =
          "https://adresar-dfb64-default-rtdb.europe-west1.firebasedatabase.app/adresar.json" + queryParams;

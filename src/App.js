@@ -32,13 +32,13 @@ function App() {
           <Route path="/contacts" element={<Contacts />}>
             <Route path="favorites" element={<Favorites />} />
             <Route path=":id" element={<Contact />} />
-            <Route path="*" element={<Login />} />
           </Route>
           <Route path="/directory" element={<Favorites />}></Route>
         </Route>
       </Routes>
     );
   }
+  //<Route path="*" element={<Login />} />
 
   return (
     <div className="App">

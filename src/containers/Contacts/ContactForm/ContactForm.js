@@ -43,12 +43,12 @@ const ContactForm = () => {
    }
 
    const formData = [
-      { id: "firstname", fieldtype: "input", value: firstname, inputProps: { maxLength: 20, required: true } },
-      { id: "lastname", fieldtype: "input", value: lastname, inputProps: { maxLength: 30, required: true } },
+      { id: "firstname", label: "First Name", fieldtype: "input", value: firstname, inputProps: { maxLength: 20, required: true } },
+      { id: "lastname", label: "Last Name", fieldtype: "input", value: lastname, inputProps: { maxLength: 30, required: true } },
       { id: "bday", fieldtype: "input", type: "date", value: bday, inputProps: { required: true } },
       // { id: "isFavorite", fieldtype: "checkbox", type: "checkbox", value: isFavorite },
-      { id: "contactType", fieldtype: "select", value: contactType, inputProps: { required: true } },
-      { id: "contact", fieldtype: "input", value: contact, inputProps: { required: true } },
+      { id: "contactType", label: "Contact type", fieldtype: "select", value: contactType, inputProps: { required: true } },
+      { id: "contact", label: "Contact", fieldtype: "input", value: contact, inputProps: { required: true } },
    ]
 
    const inputElements = formData.map(element => (

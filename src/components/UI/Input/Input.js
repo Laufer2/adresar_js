@@ -9,7 +9,9 @@ const Input = (props) => {
   switch (props.fieldtype) {
     case "input":
       inputElement = (
-        <TextField id="outlined-basic" {...props} name={props.id} onChange={props.onChange} value={props.value} />
+        <InputLabel id="outlined-basic">
+          <TextField id="outlined-basic" {...props} name={props.id} onChange={props.onChange} value={props.value} />
+        </InputLabel>
       );
       break;
     case "select":

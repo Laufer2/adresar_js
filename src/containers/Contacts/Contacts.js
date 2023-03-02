@@ -29,6 +29,13 @@ const Contacts = () => {
         }
     }, [xtoken, navigate])
 
+    let row = [];
+    for (let fav in contacts) {
+        if (fav.isFavorite === "true") {
+            row.push(fav);
+        }
+    }
+
     useEffect(() => {
         dispatch(getContacts(requestParams));
         console.log("ode po podatke")
@@ -44,6 +51,7 @@ const Contacts = () => {
     }
 
     return (<>
+        <Outlet context={row} />
 
         <Button name="addnew" onClick={addNewHandler}>Add new</Button>
 
@@ -57,7 +65,7 @@ const Contacts = () => {
         >
             <ContactForm />
         </Modal>
-        <Outlet />
+
     </>)
 }
 
