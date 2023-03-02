@@ -1,17 +1,26 @@
+import { useEffect } from 'react';
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import Favorite from "../../components/Favorite/Favorite";
 
 const Favorites = () => {
   const contacts = useSelector(state => state.rootRdc.crudRdc.contacts);
+  const xtoken = localStorage.getItem("X-token");
+  const navigate = useNavigate();
   let row = [];
-  console.log(contacts)
+
+  useEffect(() => {
+    if (!xtoken) {
+      navigate('/');
+    }
+  }, [xtoken, navigate])
+
   for (let fav in contacts) {
     if (contacts[fav].isFavorite) {
       row.push(contacts[fav]);
     }
   }
-  console.log(row)
-  const rows = 0;
+
   return (<>
     {row.map(cell => (
       <Favorite

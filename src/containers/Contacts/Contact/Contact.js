@@ -1,50 +1,66 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 import Button from "../../../components/UI/Button/Button";
 import ContactSummary from '../../../components/ContactSummary/ContactSummary';
 import Modal from "../../../components/UI/Modal/Modal";
+import { deleteContact } from '../../../store/reducers/crudRdc';
 
 
 const Contact = (props) => {
 
     const { id } = useParams()
     const [updating, setUpdating] = useState(false);
-    const [cancel, setCancel] = useState(false);
+    const [canceling, setCanceling] = useState(false);
+    const [deleting, setDeleting] = useState(false)
     const contacts = useSelector(state => state.rootRdc.crudRdc.contacts);
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const token = localStorage.getItem("X-token");
 
     useEffect(() => {
-        if (cancel) {
+        if (canceling) {
             navigate("/contacts")
         }
-    }, [cancel])
+    }, [canceling])
 
+    //Updating contact index
     const index = contacts.findIndex((contact) => contact.id === id);
 
-    const updateCancelHandler = () => {
-        setCancel(!cancel);
+    const cancelHandler = () => {
+        setCanceling(!canceling);
     };
 
-    const updateContinueHandler = () => {
+    const deleteHandler = () => {
+        dispatch(deleteContact({ token: token, key: contacts[index].key }))
+        console.log("index ", contacts[index].key)
+        setDeleting(!deleting);
+    };
+
+    const updateHandler = () => {
         setUpdating(!updating);
     };
 
     const btnTypes = [{
         name: "cancel",
         label: "Cancel",
-        onClick: updateCancelHandler
+        onClick: cancelHandler
+    },
+    {
+        name: "delete",
+        label: "Delete",
+        onClick: deleteHandler
     },
     {
         name: "update",
         label: "Update",
-        onClick: updateContinueHandler
+        onClick: updateHandler
     }]
 
     return (
         <>
-            <Modal show={updating} modalClosed={updateCancelHandler}>
+            <Modal show={updating} modalClosed={cancelHandler}>
                 <div>Forma za ažuriranje kontakta</div>
             </Modal>
             <ContactSummary

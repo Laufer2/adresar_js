@@ -8,16 +8,22 @@ import Contact from "./containers/Contacts/Contact/Contact";
 import "./App.css";
 import Layout from "./hoc/Layout";
 import Test from "./test"
+import { useSelector } from "react-redux";
+import { RingLoader } from 'react-spinners';
 
 function App() {
   const navigate = useNavigate();
   const xtoken = localStorage.getItem("X-token");
-
+  const isLoading = useSelector(store => store.rootRdc.authRdc.isLoading)
   useEffect(() => {
     if (!xtoken) {
       navigate('/');
     }
   }, [xtoken, navigate])
+
+  if (isLoading) {
+    return <RingLoader color="rgba(54, 107, 214, 1)" />
+  }
 
   let routes = (
     <Routes>
@@ -25,7 +31,7 @@ function App() {
     </Routes>
   );
 
-  if (xtoken) {
+  if (!isLoading) {
     routes = (
       <Routes>
         <Route path="/" element={<Login />} />

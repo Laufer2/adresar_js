@@ -6,7 +6,7 @@ import { RingLoader } from 'react-spinners';
 import Table from '../../components/Table/Table';
 import Button from '../../components/UI/Button/Button';
 import Modal from "../../components/UI/Modal/Modal";
-import { getContacts, postContact } from '../../store/reducers/crudRdc';
+import { getContacts } from '../../store/reducers/crudRdc';
 import ContactForm from './ContactForm/ContactForm';
 
 const Contacts = () => {

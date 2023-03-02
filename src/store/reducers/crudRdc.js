@@ -8,7 +8,7 @@ const initialState = {
 };
 
 export const getContacts = createAsyncThunk(
-   "crudRdc",
+   "crudRdc/getContacts",
    async (requestParams, { dispatch }) => {
       const queryParams = '?auth=' + requestParams.token + '&orderBy="userId"&equalTo="' + requestParams.userId + '"';
       let url =
@@ -28,7 +28,7 @@ export const getContacts = createAsyncThunk(
                } else {
                   response.data[key].isFavorite = true;
                }
-               contactsArray.push(response.data[key]);
+               contactsArray.push({ ...response.data[key], key: key });
             }
 
             dispatch(
@@ -44,13 +44,10 @@ export const getContacts = createAsyncThunk(
 );
 
 export const postContact = createAsyncThunk(
-   "crudRdc",
+   "crudRdc/postContact",
    async (requestParams, { dispatch }) => {
       dispatch(crudStart());
       let queryParams = '?auth=' + requestParams[1].token;
-      if (requestParams.method === "delete") {
-         queryParams = queryParams + requestParams.id + ".json";
-      }
       const url =
          "https://adresar-dfb64-default-rtdb.europe-west1.firebasedatabase.app/adresar.json" + queryParams;
       axios(url, {
@@ -74,7 +71,7 @@ export const postContact = createAsyncThunk(
 );
 
 export const patchContact = createAsyncThunk(
-   "crudRdc",
+   "crudRdc/patchContact",
    async (requestParams, { dispatch }) => {
 
       dispatch(crudStart());
@@ -104,13 +101,15 @@ export const patchContact = createAsyncThunk(
    }
 );
 
+//sending request without auth token = OK
 export const deleteContact = createAsyncThunk(
-   "crudRdc",
+   "crudRdc/deleteContact",
    async (requestParams, { dispatch }) => {
       dispatch(crudStart());
-      let queryParams = '?auth=' + requestParams[0].token + "/" + requestParams[0].id + ".json";
+      let queryParams = "/" + requestParams.key + ".json";
       const url =
          "https://adresar-dfb64-default-rtdb.europe-west1.firebasedatabase.app/adresar" + queryParams;
+
       axios(url, {
          method: "DELETE",
          headers: {
@@ -118,11 +117,11 @@ export const deleteContact = createAsyncThunk(
          },
       })
          .then((response) => {
-            dispatch(getContacts({ token: requestParams[0].token, id: requestParams[0].userId })
+            dispatch(getContacts({ token: requestParams.token, id: requestParams.id })
             );
          })
          .catch((err) => {
-            dispatch(crudFail(err.response.data.error));
+            dispatch(crudFail(err.message));
          });
    }
 );
