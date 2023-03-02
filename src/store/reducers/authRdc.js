@@ -65,12 +65,11 @@ const authSlice = createSlice({
       state.userId = null;
       state.error = null;
       localStorage.removeItem("X-token");
-      localStorage.removeItem("expirationDate");
+      //localStorage.removeItem("expirationDate");
       localStorage.removeItem("userId");
     },
   },
 });
-
 
 export const {
   authStart,

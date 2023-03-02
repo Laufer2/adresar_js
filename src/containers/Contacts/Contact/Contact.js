@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
+import { RingLoader } from 'react-spinners';
 
 import Button from "../../../components/UI/Button/Button";
 import ContactSummary from '../../../components/ContactSummary/ContactSummary';
@@ -15,6 +16,8 @@ const Contact = (props) => {
     const [canceling, setCanceling] = useState(false);
     const [deleting, setDeleting] = useState(false)
     const contacts = useSelector(state => state.rootRdc.crudRdc.contacts);
+    const isLoading = useSelector(state => state.rootRdc.crudRdc.isLoading);
+
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = localStorage.getItem("X-token");
@@ -24,6 +27,16 @@ const Contact = (props) => {
             navigate("/contacts")
         }
     }, [canceling])
+
+    useEffect(() => {
+        if (deleting) {
+            navigate("/contacts")
+        }
+    }, [deleting])
+
+    if (isLoading) {
+        return <RingLoader color="rgba(54, 107, 214, 1)" />
+    }
 
     //Updating contact index
     const index = contacts.findIndex((contact) => contact.id === id);

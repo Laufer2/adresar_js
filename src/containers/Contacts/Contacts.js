@@ -11,8 +11,11 @@ import ContactForm from './ContactForm/ContactForm';
 
 const Contacts = () => {
     const [addNew, setAddNew] = useState(false);
+    const [isAdded, setIsAdded] = useState(false);
     const [isFetched, setIsFetched] = useState(false);
     const contacts = useSelector(state => state.rootRdc.crudRdc.contacts);
+    const isLoading = useSelector(state => state.rootRdc.crudRdc.isLoadin);
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const xtoken = localStorage.getItem("X-token");
@@ -29,6 +32,16 @@ const Contacts = () => {
         }
     }, [xtoken, navigate])
 
+    useEffect(() => {
+        dispatch(getContacts(requestParams));
+        console.log("ode po podatke")
+        setIsFetched(!isFetched)
+    }, [])
+
+    if (isLoading) {
+        return <RingLoader color="rgba(54, 107, 214, 1)" />
+    }
+
     let row = [];
     for (let fav in contacts) {
         if (fav.isFavorite === "true") {
@@ -36,18 +49,16 @@ const Contacts = () => {
         }
     }
 
-    useEffect(() => {
-        dispatch(getContacts(requestParams));
-        console.log("ode po podatke")
-        setIsFetched(!isFetched)
-    }, [])
-
     const addNewHandler = () => {
         setAddNew(true);
     }
 
     const addNewCancelHandler = () => {
         setAddNew(false);
+    }
+
+    const addNewContactHandler = () => {
+        setIsAdded(!isAdded);
     }
 
     return (<>
@@ -62,7 +73,7 @@ const Contacts = () => {
             show={addNew}
             modalClosed={addNewCancelHandler}
         >
-            <ContactForm />
+            <ContactForm onClick={addNewContactHandler} />
         </Modal>
 
         <Outlet context={row} />

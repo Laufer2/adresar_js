@@ -9,8 +9,7 @@ import Input from "../../../components/UI/Input/Input";
 import Button from "../../../components/UI/Button/Button";
 import { postContact } from "../../../store/reducers/crudRdc";
 
-
-const ContactForm = () => {
+const ContactForm = (props) => {
    const [firstname, setFirstname] = useState('');
    const [lastname, setLastname] = useState('');
    const [bday, setBday] = useState('');
@@ -30,8 +29,6 @@ const ContactForm = () => {
 
    const changeHandler = (e = null) => {
       if (e) {
-
-
          switch (e.target.name) {
             case "firstname":
                setFirstname(e.target.value);
@@ -52,7 +49,6 @@ const ContactForm = () => {
             //    setIsFavorite(e.target.value)
             //    break;
             default:
-
                break;
          }
       }
@@ -112,7 +108,7 @@ const ContactForm = () => {
          autoComplete="off"
       >
          {inputElements}
-         <Button variant="contained" type="submit" name="add" size="large" value={userID}>ADD</Button>
+         <Button variant="contained" type="submit" name="add" size="large" value={userID} onClick={props.addNewContactHandler}>ADD</Button>
       </Box>
    </>
    )
