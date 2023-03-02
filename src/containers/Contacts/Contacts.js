@@ -51,7 +51,6 @@ const Contacts = () => {
     }
 
     return (<>
-        <Outlet context={row} />
 
         <Button name="addnew" onClick={addNewHandler}>Add new</Button>
 
@@ -65,6 +64,8 @@ const Contacts = () => {
         >
             <ContactForm />
         </Modal>
+
+        <Outlet context={row} />
 
     </>)
 }

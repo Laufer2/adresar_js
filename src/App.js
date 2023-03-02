@@ -7,6 +7,7 @@ import Contacts from "./containers/Contacts/Contacts";
 import Contact from "./containers/Contacts/Contact/Contact";
 import "./App.css";
 import Layout from "./hoc/Layout";
+import Test from "./test"
 
 function App() {
   const navigate = useNavigate();

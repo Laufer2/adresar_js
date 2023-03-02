@@ -10,20 +10,10 @@ import TabPanel from "../../components/UI/TabPanel/TabPanel";
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [, setToggle] = useState(false);
   const [value, setValue] = useState(0);
-
-  const xtoken = useSelector(state => state.rootRdc.authRdc.token);
-  const isLoading = useSelector(state => state.rootRdc.authRdc.isLoading);
-  const err = useSelector(state => state.rootRdc.authRdc.error);
-
-  const authToken = localStorage.getItem("X-token");
-
   const dispatch = useDispatch();
-
-  useEffect(() => {
-
-  }, []);
+  const err = useSelector(state => state.rootRdc.authRdc.error);
+  const authToken = localStorage.getItem("X-token");
 
   let redirect = null;
   if (authToken) {
@@ -44,7 +34,6 @@ const Login = () => {
     e.preventDefault();
     const clickedButton = e.nativeEvent.submitter;
     dispatchAction(clickedButton.name === "signUp");
-    //setIsSignUp(!isSignUp);
   };
 
   const handleTabChange = (event, newValue) => {
@@ -100,7 +89,7 @@ const Login = () => {
               value={password}
               onChange={handlePasswordChange}
               required
-            //pattern={"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-+_!@#$%^&*.,?]).{8}$"}
+              pattern={"^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[-+_!@#$%^&*.,?]).{8}$"}
             />
             <Button type="submit" name="signUp">Sign Up</Button>
           </form>
