@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 import Button from "../../../components/UI/Button/Button";
@@ -8,22 +8,27 @@ import Modal from "../../../components/UI/Modal/Modal";
 
 
 const Contact = (props) => {
-    //potrebno mijenjati stanje radi rerenderiranja stranice jer se modal pojavljuje 
-    //i skriva na istoj stranici gdje su contact podaci
+
     const { id } = useParams()
-    console.log(id)
     const [updating, setUpdating] = useState(false);
+    const [cancel, setCancel] = useState(false);
     const contacts = useSelector(state => state.rootRdc.crudRdc.contacts);
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        if (cancel) {
+            navigate("/contacts")
+        }
+    }, [cancel])
 
     const index = contacts.findIndex((contact) => contact.id === id);
 
     const updateCancelHandler = () => {
-        setUpdating(false);
+        setCancel(!cancel);
     };
 
     const updateContinueHandler = () => {
-        props.onInitPurchase();
-        props.history.push('/contacts');
+        setUpdating(!updating);
     };
 
     const btnTypes = [{
