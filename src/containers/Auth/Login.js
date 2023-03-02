@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { Box, Tabs, Tab } from '@mui/material';
+import { RingLoader } from 'react-spinners';
 
 import { authUser, setAuthRedirectPath } from "../../store/reducers/authRdc";
 import Button from "../../components/UI/Button/Button";
@@ -11,13 +12,28 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [value, setValue] = useState(0);
+  const [login, setLogin] = useState(false);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const err = useSelector(state => state.rootRdc.authRdc.error);
+  const isLoading = useSelector(state => state.rootRdc.authRdc.isLoading);
+
   const authToken = localStorage.getItem("X-token");
+
+  useEffect(() => {
+    console.log("login: ", login)
+    if (login) {
+      navigate('/contacts');
+    }
+  }, [login])
 
   let redirect = null;
   if (authToken) {
     redirect = <Navigate to="/contacts" replace />
+  }
+
+  if (isLoading) {
+    return <RingLoader color="rgba(54, 107, 214, 1)" />
   }
 
   const dispatchAction = (isSignup) => {
@@ -34,6 +50,9 @@ const Login = () => {
     e.preventDefault();
     const clickedButton = e.nativeEvent.submitter;
     dispatchAction(clickedButton.name === "signUp");
+    setLogin(!login);
+    console.log("u submitu")
+
   };
 
   const handleTabChange = (event, newValue) => {
