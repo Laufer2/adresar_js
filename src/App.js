@@ -34,6 +34,7 @@ function App() {
             <Route path=":id" element={<Contact />} />
             <Route path="*" element={<Login />} />
           </Route>
+          <Route path="/directory" element={<Favorites />}></Route>
         </Route>
       </Routes>
     );
