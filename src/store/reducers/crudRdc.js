@@ -23,11 +23,6 @@ export const getContacts = createAsyncThunk(
             let contactsArray = [];
 
             for (let key in response.data) {
-               if (response.data[key].isFavorite === "false") {
-                  response.data[key].isFavorite = false;
-               } else {
-                  response.data[key].isFavorite = true;
-               }
                contactsArray.push({ ...response.data[key], key: key });
             }
 
@@ -75,23 +70,20 @@ export const patchContact = createAsyncThunk(
    async (requestParams, { dispatch }) => {
 
       dispatch(crudStart());
-      let queryParams = '?auth=' + requestParams.token + "/" + requestParams.id + "/.json";
+      console.log(requestParams[0])
+      let queryParams = "/" + requestParams[1].key + ".json" + '?auth=' + requestParams[1].token;
       const url =
          "https://adresar-dfb64-default-rtdb.europe-west1.firebasedatabase.app/adresar" + queryParams;
 
       axios(url, {
          method: "PATCH",
          headers: {
-            "Authorization": "Bearer " + requestParams.token,
             "Content-Type": "application/json",
-            'Access-Control-Allow-Origin': 'http://localhost:3000',
-            "Access-Control-Allow-Methods": "DELETE, PATCH, PUT, POST, GET, OPTIONS",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Requested-With"
          },
-         data: { isFavorite: requestParams.isFavorite },
+         data: requestParams[0],
       })
          .then((response) => {
-            dispatch(getContacts({ token: requestParams.token, userId: requestParams.userId })
+            dispatch(getContacts({ token: requestParams[1].token, userId: requestParams[1].userId })
             );
          })
          .catch((err) => {

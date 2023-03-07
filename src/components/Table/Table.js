@@ -14,6 +14,7 @@ export default function Table(props) {
   const [isFav, setIsFav] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const token = localStorage.getItem("X-token");
+  const userId = localStorage.getItem("userId");
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -33,20 +34,19 @@ export default function Table(props) {
     const { id } = params.row;
     const newContacts = _.cloneDeep(props.rows);
     const index = newContacts.findIndex((contact) => contact.id === id);
-    newContacts[index].isFavorite = !isFav;
+    newContacts[index].isFavorite = !newContacts[index].isFavorite;
 
-    const contactData = {
-      isFavorite: !isFav,
-      id: id,
-      index: index,
+    const contactData = [{
+      isFavorite: newContacts[index].isFavorite
+    },
+    {
+      userId: userId,
+      key: newContacts[index].key,
       token: token,
-      method: "patch"
-    }
-    dispatch(updateContacts({ contacts: newContacts }))
-    //dispatch(patchContact(contactData))
-    setIsFav(!isFav);
+    }]
+    dispatch(patchContact(contactData))
   };
-  ;
+
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -80,22 +80,19 @@ export default function Table(props) {
           <ToggleButtonGroup>
             <ToggleButton
               value="favorite"
-              selected={params.row.isFavorite}
+              selected={!!params.row.isFavorite}
               onClick={(event) => {
                 event.stopPropagation();
                 favoriteButtonClickHandler(params);
               }}
             >
-              {params.row.isFavorite ? <Favorite /> : <FavoriteBorder />}
+              {!!params.row.isFavorite ? <Favorite /> : <FavoriteBorder />}
             </ToggleButton>
           </ToggleButtonGroup>
         </div>
       ),
     },
   ];
-  // const rowClickHandler = (params) => {
-  //   alert(params.id);
-  // };
 
   function selectionChangeHandler(selectionModel) {
     setIsSelected(selectionModel);
