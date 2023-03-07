@@ -6,33 +6,27 @@ import { RingLoader } from 'react-spinners';
 import Button from "../../../components/UI/Button/Button";
 import ContactSummary from '../../../components/ContactSummary/ContactSummary';
 import Modal from "../../../components/UI/Modal/Modal";
-import { deleteContact } from '../../../store/reducers/crudRdc';
-
+import { patchContact } from '../../../store/reducers/crudRdc';
 
 const Contact = (props) => {
 
     const { id } = useParams()
     const [updating, setUpdating] = useState(false);
     const [canceling, setCanceling] = useState(false);
-    const [deleting, setDeleting] = useState(false)
     const contacts = useSelector(state => state.rootRdc.crudRdc.contacts);
     const isLoading = useSelector(state => state.rootRdc.crudRdc.isLoading);
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const token = localStorage.getItem("X-token");
+    const userId = localStorage.getItem("userId");
+
 
     useEffect(() => {
         if (canceling) {
             navigate("/contacts")
         }
     }, [canceling])
-
-    useEffect(() => {
-        if (deleting) {
-            navigate("/contacts")
-        }
-    }, [deleting])
 
     if (isLoading) {
         return <RingLoader color="rgba(54, 107, 214, 1)" />
@@ -46,9 +40,10 @@ const Contact = (props) => {
     };
 
     const deleteHandler = () => {
-        dispatch(deleteContact({ token: token, key: contacts[index].key }))
-        console.log("index ", contacts[index].key)
-        setDeleting(!deleting);
+        dispatch(patchContact({ token: token, key: contacts[index].key, userId: userId, method: "DELETE" }))
+        console.log("userId ", userId)
+        navigate("/contacts")
+        //setDeleting(!deleting);
     };
 
     const updateHandler = () => {
