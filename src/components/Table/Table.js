@@ -11,7 +11,6 @@ import classes from "./Table.module.css";
 
 
 export default function Table(props) {
-  const [isFav, setIsFav] = useState(false);
   const [isSelected, setIsSelected] = useState(false);
   const token = localStorage.getItem("X-token");
   const userId = localStorage.getItem("userId");
@@ -36,17 +35,15 @@ export default function Table(props) {
     const index = newContacts.findIndex((contact) => contact.id === id);
     newContacts[index].isFavorite = !newContacts[index].isFavorite;
 
-    const contactData = [{
-      isFavorite: newContacts[index].isFavorite
-    },
-    {
+    const contactData = {
+      isFavorite: newContacts[index].isFavorite,
       userId: userId,
       key: newContacts[index].key,
       token: token,
-    }]
+      method: "PATCH"
+    }
     dispatch(patchContact(contactData))
   };
-
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },

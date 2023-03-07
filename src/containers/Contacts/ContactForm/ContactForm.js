@@ -85,7 +85,7 @@ const ContactForm = (props) => {
          bday: bday,
          contactType: contactType,
          contact: contact,
-         isFavorite: "false"
+         isFavorite: false
       },
       {
          token: token,
